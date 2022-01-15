@@ -98,31 +98,19 @@ public class Utils {
                         cardapio.getPreco(),
                     });
                 }
-            } else if (arrayList.get(0) instanceof Cliente){
+            } else if (arrayList.get(0) instanceof Pessoa){
                     for (Iterator<?> it = arrayList.iterator(); it.hasNext();) {
-                        Cliente cliente = (Cliente) it.next();
+                        Pessoa pessoa = (Pessoa) it.next();
                         tableModel.addRow(new Object[]{
-                            cliente.getId(),
-                            cliente.getNome(),
-                            cliente.getRua(),
-                            cliente.getBairro(),
-                            cliente.getTelefone(),
-                            cliente.getData()
+                            pessoa.getId(),
+                            pessoa.getNome(),
+                            pessoa.getRua(),
+                            pessoa.getBairro(),
+                            pessoa.getTelefone(),
+                            pessoa.getData()
                         });
                     }
-            } else if (arrayList.get(0) instanceof Entregador){
-                for (Iterator<?> it = arrayList.iterator(); it.hasNext();) {
-                    Entregador entregador = (Entregador) it.next();
-                    tableModel.addRow(new Object[]{
-                        entregador.getId(),
-                        entregador.getNome(),
-                        entregador.getRua(),
-                        entregador.getBairro(),
-                        entregador.getTelefone(),
-                        entregador.getData()
-                    });
-                }
-            }
+            } 
         }
     }
 }

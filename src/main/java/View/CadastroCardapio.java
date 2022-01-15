@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
 import model.bean.Cardapio;
-import model.dao.CardapioDAO;
 import model.dao.ExceptionDAO;
 
 /**
@@ -96,7 +95,7 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
         cliEdit1 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         carCancelar = new javax.swing.JButton();
-        carComfirmar = new javax.swing.JButton();
+        cliComfirmar = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -292,13 +291,13 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
             }
         });
 
-        carComfirmar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/save.png"))); // NOI18N
-        carComfirmar.setText("Confrimar");
-        carComfirmar.setToolTipText("Editar");
-        carComfirmar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        carComfirmar.addActionListener(new java.awt.event.ActionListener() {
+        cliComfirmar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/save.png"))); // NOI18N
+        cliComfirmar.setText("Confrimar");
+        cliComfirmar.setToolTipText("Editar");
+        cliComfirmar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        cliComfirmar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                carComfirmarActionPerformed(evt);
+                cliComfirmarActionPerformed(evt);
             }
         });
 
@@ -308,7 +307,7 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(192, 192, 192)
-                .addComponent(carComfirmar)
+                .addComponent(cliComfirmar)
                 .addGap(61, 61, 61)
                 .addComponent(carCancelar)
                 .addContainerGap(190, Short.MAX_VALUE))
@@ -318,7 +317,7 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(13, 13, 13)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(carComfirmar)
+                    .addComponent(cliComfirmar)
                     .addComponent(carCancelar))
                 .addGap(13, 13, 13))
         );
@@ -332,7 +331,7 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jSeparator1)
-            .addComponent(jLayeredPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE)
+            .addComponent(jLayeredPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 613, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -351,7 +350,6 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cliSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliSaveActionPerformed
-        // TODO add your handling code here:
         try {
             cardapioController.insertOrUpdate(carNome.getText(),
                                               carCategoria.getText(),
@@ -367,11 +365,10 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         mostarPainel(jPanel5);
         int carCod = (int) TableCardapio.getValueAt(TableCardapio.getSelectedRow(), 0);
-        CardapioDAO dao = new CardapioDAO();
 
         Cardapio cardapio;
         try {
-            cardapio = dao.findById(Cardapio.class, carCod);
+            cardapio = cardapioController.findById(carCod);
             carNome.setText(cardapio.getNome());
             carCategoria.setText(cardapio.getCategoria());
             carPreco.setText(String.valueOf(cardapio.getPreco()));
@@ -381,13 +378,11 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cliEditActionPerformed
 
     private void carCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carCancelarActionPerformed
-        // TODO add your handling code here:
         mostarPainel(jPanel4);
         limparDados();
     }//GEN-LAST:event_carCancelarActionPerformed
 
-    private void carComfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carComfirmarActionPerformed
-        // TODO add your handling code here:
+    private void cliComfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliComfirmarActionPerformed
         Cardapio cardapio = new Cardapio();
         int id =((int) TableCardapio.getValueAt(TableCardapio.getSelectedRow(), 0));
 
@@ -405,10 +400,9 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
         refreshTable();
         limparDados();
         mostarPainel(jPanel4);
-    }//GEN-LAST:event_carComfirmarActionPerformed
+    }//GEN-LAST:event_cliComfirmarActionPerformed
 
     private void cliEdit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliEdit1ActionPerformed
-        // TODO add your handling code here:
         int carCod = (int) TableCardapio.getValueAt(TableCardapio.getSelectedRow(), 0);
         try {
             cardapioController.removeByID(carCod);
@@ -419,7 +413,6 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cliEdit1ActionPerformed
 
     private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
-        // TODO add your handling code here:
         String searchnome = jTextField4.getText();
         if(!searchnome.isEmpty()){
             try {
@@ -437,9 +430,9 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
     private javax.swing.JTable TableCardapio;
     private javax.swing.JButton carCancelar;
     private javax.swing.JTextField carCategoria;
-    private javax.swing.JButton carComfirmar;
     private javax.swing.JTextField carNome;
     private javax.swing.JTextField carPreco;
+    private javax.swing.JButton cliComfirmar;
     private javax.swing.JButton cliEdit;
     private javax.swing.JButton cliEdit1;
     private javax.swing.JButton cliSave;

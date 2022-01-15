@@ -1,11 +1,12 @@
 package View;
 
+import Controller.ClienteController;
 import static Controller.Utils.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import model.bean.Cliente;
-import model.dao.ClienteDAO;
 import model.dao.ExceptionDAO;
 
 /**
@@ -18,7 +19,7 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
      * @return 
      */
     private static CadastroCliente cadastroCliente;
-    private final ClienteDAO clienteDao = new ClienteDAO();
+    private final ClienteController clienteController = new ClienteController();
     
     public static CadastroCliente getInstancia(){
         if(cadastroCliente== null){
@@ -28,13 +29,13 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
     }
     public CadastroCliente() {
         initComponents();
-        
+        mostarPainel(jPanel5);
         refreshTable();
     }
 
     public void refreshTable(){
         try {
-            preencherTabela(TableCliente, clienteDao.findAll(Cliente.class));
+            preencherTabela(TableCliente, clienteController.findAll());
         } catch (ExceptionDAO ex) {
             Logger.getLogger(CadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -49,11 +50,12 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
     } 
     
     public void mostarPainel(JPanel painel){
-//        jLayeredPane4.removeAll();
-//        jLayeredPane4.add(painel);
-//        jLayeredPane4.repaint();
-//        jLayeredPane4.revalidate();
+        jLayeredPane4.removeAll();
+        jLayeredPane4.add(painel);
+        jLayeredPane4.repaint();
+        jLayeredPane4.revalidate();
     }
+    
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -73,8 +75,6 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
         cliTelefone = new javax.swing.JFormattedTextField();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        cliSave = new javax.swing.JButton();
-        cliEdit = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 32767));
         jPanel3 = new javax.swing.JPanel();
@@ -83,6 +83,14 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TableCliente = new javax.swing.JTable();
+        jLayeredPane4 = new javax.swing.JLayeredPane();
+        jPanel5 = new javax.swing.JPanel();
+        cliSave = new javax.swing.JButton();
+        cliEdit = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        cliDelete = new javax.swing.JButton();
+        cliCancelar = new javax.swing.JButton();
+        cliComfirmar = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -93,12 +101,6 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Rua");
 
-        cliNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cliNomeActionPerformed(evt);
-            }
-        });
-
         try {
             cliTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##) #####-####")));
         } catch (java.text.ParseException ex) {
@@ -108,26 +110,6 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
         jLabel8.setText("Telefone");
 
         jLabel9.setText("Bairro");
-
-        cliSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/save.png"))); // NOI18N
-        cliSave.setText("Salvar");
-        cliSave.setToolTipText("Salvar");
-        cliSave.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        cliSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cliSaveActionPerformed(evt);
-            }
-        });
-
-        cliEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/edit.png"))); // NOI18N
-        cliEdit.setText("Editar");
-        cliEdit.setToolTipText("Editar");
-        cliEdit.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        cliEdit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cliEditActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -140,13 +122,9 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cliRua, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cliNome, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cliSave, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cliEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(cliNome, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(66, 66, 66)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
@@ -172,11 +150,7 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
                     .addComponent(jLabel9)
                     .addComponent(cliBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cliSave)
-                    .addComponent(cliEdit))
-                .addContainerGap())
+                .addGap(10, 10, 10))
         );
 
         jLabel7.setText("Buscar");
@@ -196,7 +170,7 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cliSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(744, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,7 +179,7 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(cliSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         TableCliente.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -282,14 +256,125 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
                 .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jLayeredPane4.setLayout(new java.awt.CardLayout());
+
+        jPanel5.setMaximumSize(new java.awt.Dimension(608, 57));
+
+        cliSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/save.png"))); // NOI18N
+        cliSave.setText("Salvar");
+        cliSave.setToolTipText("Salvar");
+        cliSave.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        cliSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cliSaveActionPerformed(evt);
+            }
+        });
+
+        cliEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/edit.png"))); // NOI18N
+        cliEdit.setText("Editar");
+        cliEdit.setToolTipText("Editar");
+        cliEdit.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        cliEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cliEditActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(178, 178, 178)
+                .addComponent(cliEdit)
+                .addGap(18, 18, 18)
+                .addComponent(cliSave)
+                .addGap(178, 178, 178))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cliEdit)
+                    .addComponent(cliSave))
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
+
+        jLayeredPane4.add(jPanel5, "card2");
+
+        jPanel6.setMaximumSize(new java.awt.Dimension(608, 57));
+
+        cliDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/delete.png"))); // NOI18N
+        cliDelete.setText("Deletar");
+        cliDelete.setToolTipText("Editar");
+        cliDelete.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        cliDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cliDeleteActionPerformed(evt);
+            }
+        });
+
+        cliCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/cancel.png"))); // NOI18N
+        cliCancelar.setText("Cancelar");
+        cliCancelar.setToolTipText("Salvar");
+        cliCancelar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        cliCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cliCancelarActionPerformed(evt);
+            }
+        });
+
+        cliComfirmar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagens/save.png"))); // NOI18N
+        cliComfirmar.setText("Confrimar");
+        cliComfirmar.setToolTipText("Editar");
+        cliComfirmar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        cliComfirmar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cliComfirmarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addComponent(cliComfirmar)
+                .addGap(18, 18, 18)
+                .addComponent(cliDelete)
+                .addGap(18, 18, 18)
+                .addComponent(cliCancelar)
+                .addContainerGap(101, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cliComfirmar)
+                    .addComponent(cliCancelar)
+                    .addComponent(cliDelete))
+                .addGap(19, 19, 19))
+        );
+
+        jLayeredPane4.add(jPanel6, "card3");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(334, 334, 334)
+                        .addComponent(jLayeredPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,38 +382,20 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 44, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLayeredPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cliEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliEditActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cliEditActionPerformed
-
-    private void cliSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliSaveActionPerformed
-        // TODO add your handling code here:
-        Cliente cliente = new Cliente(cliNome.getText(), cliRua.getText(), cliBairro.getText(), cliTelefone.getText(), getData());
-        try {
-            clienteDao.insertOrUpdate(cliente);
-        } catch (ExceptionDAO ex) {
-            Logger.getLogger(CadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        refreshTable();
-        limparDados();
-    }//GEN-LAST:event_cliSaveActionPerformed
-
-    private void cliNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cliNomeActionPerformed
-
     private void cliSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cliSearchKeyReleased
-        // TODO add your handling code here:
+
         String searchTerm = cliSearch.getText();
         if(!searchTerm.isEmpty()){
             try {
-                preencherTabela(TableCliente, clienteDao.findLikeName(Cliente.class, searchTerm));
+                preencherTabela(TableCliente, clienteController.findLikeName(searchTerm));
             } catch (ExceptionDAO ex) {
                 Logger.getLogger(CadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -337,10 +404,80 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_cliSearchKeyReleased
 
+    private void cliSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliSaveActionPerformed
+        try {
+            clienteController.insertOrUpdate(cliNome.getText(),
+                                             cliRua.getText(),
+                                             cliBairro.getText(),
+                                             cliTelefone.getText());
+        } catch (ExceptionDAO ex) {
+            Logger.getLogger(CadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        refreshTable();
+        limparDados();
+    }//GEN-LAST:event_cliSaveActionPerformed
+
+    private void cliEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliEditActionPerformed
+        if(TableCliente.getSelectedRow() >= 0){
+            mostarPainel(jPanel6);
+            int carCod = (int) TableCliente.getValueAt(TableCliente.getSelectedRow(), 0);
+            Cliente cliente;
+            try {
+                cliente = clienteController.findById(carCod);
+                cliNome.setText(cliente.getNome());
+                cliRua.setText(cliente.getRua());
+                cliBairro.setText(cliente.getBairro());
+                cliTelefone.setText(cliente.getTelefone());
+            } catch (ExceptionDAO ex) {
+                Logger.getLogger(CadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+        }else {
+            JOptionPane.showMessageDialog(null, "Selecione algum cliente na tabela para editar");
+            }
+    }//GEN-LAST:event_cliEditActionPerformed
+
+    private void cliDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliDeleteActionPerformed
+            try {
+                int cliCod = (int) TableCliente.getValueAt(TableCliente.getSelectedRow(), 0);
+                clienteController.removeByID(cliCod);
+            } catch (ExceptionDAO ex) {
+                Logger.getLogger(CadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        refreshTable();
+    }//GEN-LAST:event_cliDeleteActionPerformed
+
+    private void cliCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliCancelarActionPerformed
+        // TODO add your handling code here:
+        mostarPainel(jPanel5);
+        limparDados();
+    }//GEN-LAST:event_cliCancelarActionPerformed
+
+    private void cliComfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliComfirmarActionPerformed
+        Cliente cliente = new Cliente();
+        int id =((int) TableCliente.getValueAt(TableCliente.getSelectedRow(), 0));
+
+        try {
+            clienteController.insertOrUpdate(id,
+                                             cliNome.getText(),
+                                             cliRua.getText(),
+                                             cliBairro.getText(),
+                                             cliTelefone.getText());
+        } catch (ExceptionDAO ex) {
+            Logger.getLogger(CadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        refreshTable();
+        limparDados();
+        mostarPainel(jPanel5);
+    }//GEN-LAST:event_cliComfirmarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TableCliente;
     private javax.swing.JTextField cliBairro;
+    private javax.swing.JButton cliCancelar;
+    private javax.swing.JButton cliComfirmar;
+    private javax.swing.JButton cliDelete;
     private javax.swing.JButton cliEdit;
     private javax.swing.JTextField cliNome;
     private javax.swing.JTextField cliRua;
@@ -353,10 +490,13 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLayeredPane jLayeredPane4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

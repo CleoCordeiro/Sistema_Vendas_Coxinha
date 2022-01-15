@@ -362,7 +362,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="192" max="-2" attributes="0"/>
-                      <Component id="carComfirmar" min="-2" max="-2" attributes="0"/>
+                      <Component id="cliComfirmar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
                       <Component id="carCancelar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="190" max="32767" attributes="0"/>
@@ -374,7 +374,7 @@
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="carComfirmar" min="-2" max="-2" attributes="0"/>
+                          <Component id="cliComfirmar" min="-2" max="-2" attributes="0"/>
                           <Component id="carCancelar" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
@@ -400,7 +400,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="carCancelarActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="carComfirmar">
+            <Component class="javax.swing.JButton" name="cliComfirmar">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/Imagens/save.png"/>
@@ -414,7 +414,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="carComfirmarActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cliComfirmarActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
