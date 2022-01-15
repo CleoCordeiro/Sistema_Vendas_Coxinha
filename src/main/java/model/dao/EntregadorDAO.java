@@ -11,10 +11,5 @@ import model.bean.Entregador;
  * @author Cleo
  */
 public class EntregadorDAO extends GenericDAO<Entregador>{
-    private Integer id;
-    private String nome;
-    private String rua;
-    private String bairro;
-    private String telefone;
-    private String data;
+
 }

@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.dao;
 
-import Utils.FormUtils;
+import Controller.Utils;
+import java.lang.reflect.Field;
 import model.bean.Entregador;
 
 
@@ -14,12 +10,11 @@ import model.bean.Entregador;
  * @author tiago
  */
 public class TesteHibernate {
-    public static void main(String[] args) {
-        EntregadorDAO entregadorDAO = new EntregadorDAO();
-        System.out.println(FormUtils.getData());
-        Entregador entregador = new Entregador("Cleo", "trav. da vigia", "Santa Helena", "999999", FormUtils.getData());
-        entregadorDAO.insertOrUpdate(entregador);
-      //dao.removeByID(Cliente.class, 6);
+    public static void main(String[] args) throws ExceptionDAO {
+        String data = Utils.getData();
+        Entregador entregador = new Entregador("Testando novo entregador", "Teste", "Teste", "99999999", data);
+        Field[] declaredFields = entregador.getClass().getDeclaredFields();
+        System.out.println(entregador.getClass().getDeclaredFields().length);
 
 
     }

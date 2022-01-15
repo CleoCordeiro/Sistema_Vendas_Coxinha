@@ -1,15 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
-package Formularios;
+package View;
 
-import static Utils.FormUtils.*;
-import java.util.ArrayList;
+import static Controller.Utils.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
-import model.bean.Cardapio;
 import model.bean.Cliente;
 import model.dao.ClienteDAO;
+import model.dao.ExceptionDAO;
 
 /**
  *
@@ -35,8 +32,12 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
         refreshTable();
     }
 
-      public void refreshTable(){
-        preencherTabela(TableCliente, (ArrayList<Cliente>) clienteDao.findAll(Cliente.class));
+    public void refreshTable(){
+        try {
+            preencherTabela(TableCliente, clienteDao.findAll(Cliente.class));
+        } catch (ExceptionDAO ex) {
+            Logger.getLogger(CadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
   
@@ -45,7 +46,6 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
         cliRua.setText("");
         cliBairro.setText("");
         cliTelefone.setText("");
-        //cliData.setText("");
     } 
     
     public void mostarPainel(JPanel painel){
@@ -310,7 +310,11 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
     private void cliSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliSaveActionPerformed
         // TODO add your handling code here:
         Cliente cliente = new Cliente(cliNome.getText(), cliRua.getText(), cliBairro.getText(), cliTelefone.getText(), getData());
-        clienteDao.insertOrUpdate(cliente);
+        try {
+            clienteDao.insertOrUpdate(cliente);
+        } catch (ExceptionDAO ex) {
+            Logger.getLogger(CadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
         refreshTable();
         limparDados();
     }//GEN-LAST:event_cliSaveActionPerformed
@@ -323,7 +327,11 @@ public class CadastroCliente extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         String searchTerm = cliSearch.getText();
         if(!searchTerm.isEmpty()){
-            preencherTabela(TableCliente, clienteDao.findByNome(Cliente.class, searchTerm));
+            try {
+                preencherTabela(TableCliente, clienteDao.findLikeName(Cliente.class, searchTerm));
+            } catch (ExceptionDAO ex) {
+                Logger.getLogger(CadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
            refreshTable();
         }

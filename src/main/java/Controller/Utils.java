@@ -1,8 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package Utils;
+package Controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,12 +13,14 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.bean.Cardapio;
 import model.bean.Cliente;
+import model.bean.Entregador;
+import model.bean.Pessoa;
 
 /**
  *
  * @author Cleo
  */
-public class FormUtils {
+public class Utils {
 
     //Validação da data
     public static boolean validaData(String data){
@@ -49,7 +47,7 @@ public class FormUtils {
         try {
             dataFormated = usd.format(pt_br.parse(Data));
         } catch (ParseException ex) {
-            Logger.getLogger(FormUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
         }
         return dataFormated;
     }
@@ -91,7 +89,6 @@ public class FormUtils {
         table.setRowSelectionAllowed(true);
         table.setEnabled(true);
         if(!arrayList.isEmpty()){
-        
             if (arrayList.get(0) instanceof Cardapio){
                 for (Iterator<?> it = arrayList.iterator(); it.hasNext();) {
                     Cardapio cardapio = (Cardapio) it.next();
@@ -102,19 +99,30 @@ public class FormUtils {
                     });
                 }
             } else if (arrayList.get(0) instanceof Cliente){
+                    for (Iterator<?> it = arrayList.iterator(); it.hasNext();) {
+                        Cliente cliente = (Cliente) it.next();
+                        tableModel.addRow(new Object[]{
+                            cliente.getId(),
+                            cliente.getNome(),
+                            cliente.getRua(),
+                            cliente.getBairro(),
+                            cliente.getTelefone(),
+                            cliente.getData()
+                        });
+                    }
+            } else if (arrayList.get(0) instanceof Entregador){
                 for (Iterator<?> it = arrayList.iterator(); it.hasNext();) {
-                    Cliente cliemte = (Cliente) it.next();
+                    Entregador entregador = (Entregador) it.next();
                     tableModel.addRow(new Object[]{
-                        cliemte.getId(),
-                        cliemte.getNome(),
-                        cliemte.getRua(),
-                        cliemte.getBairro(),
-                        cliemte.getTelefone(),
-                        cliemte.getData()
+                        entregador.getId(),
+                        entregador.getNome(),
+                        entregador.getRua(),
+                        entregador.getBairro(),
+                        entregador.getTelefone(),
+                        entregador.getData()
                     });
                 }
             }
         }
     }
-    
 }

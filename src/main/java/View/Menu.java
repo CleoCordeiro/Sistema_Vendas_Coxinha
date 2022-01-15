@@ -1,23 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-package Formularios;
+package View;
 
-import Utils.GerenteDeJanelas;
+import Controller.GerenteDeJanelas;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.beans.PropertyVetoException;
-import static java.util.function.Predicate.not;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static javax.management.Query.not;
 import javax.swing.ImageIcon;
-import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import model.dao.ExceptionDAO;
 
 /**
  *
@@ -180,30 +172,38 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_MenuSairMousePressed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-        if (!CadastroCardapio.getInstancia().isVisible() && !CadastroEntregador.getInstancia().isVisible()){
-            gerenteDeJanelas.abrirJanela(CadastroCliente.getInstancia());
-            try {
-                CadastroCliente.getInstancia().setMaximum(true);
-            } catch (PropertyVetoException ex) {
-                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            // TODO add your handling code here:
+            if (!CadastroCardapio.getInstancia().isVisible() && !CadastroEntregador.getInstancia().isVisible()){
+                gerenteDeJanelas.abrirJanela(CadastroCliente.getInstancia());
+                try {
+                    CadastroCliente.getInstancia().setMaximum(true);
+                } catch (PropertyVetoException ex) {
+                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                Toolkit.getDefaultToolkit().beep();
             }
-        } else {
-            Toolkit.getDefaultToolkit().beep();
-        }
-        
+
 //         System.out.println(CadastroCliente.getInstancia());
 //         gerenteDeJanelas.fecharJanela(CadastroEntregador.getInstancia());
 //         gerenteDeJanelas.fecharJanela(CadastroCardapio.getInstancia());
-         //CadastroCardapio.getClose();
+//CadastroCardapio.getClose();
+        } catch (ExceptionDAO ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
-        if (!CadastroCliente.getInstancia().isVisible() && !CadastroEntregador.getInstancia().isVisible()){
-            gerenteDeJanelas.abrirJanela(CadastroCardapio.getInstancia());
-        } else {
-            Toolkit.getDefaultToolkit().beep();
+        try {
+            // TODO add your handling code here:
+            if (!CadastroCliente.getInstancia().isVisible() && !CadastroEntregador.getInstancia().isVisible()){
+                gerenteDeJanelas.abrirJanela(CadastroCardapio.getInstancia());
+            } else {
+                Toolkit.getDefaultToolkit().beep();
+            }
+        } catch (ExceptionDAO ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }//GEN-LAST:event_jMenuItem2ActionPerformed
@@ -211,7 +211,11 @@ public class Menu extends javax.swing.JFrame {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
         if (!CadastroCliente.getInstancia().isVisible() && !CadastroCardapio.getInstancia().isVisible()){
-            gerenteDeJanelas.abrirJanela(CadastroEntregador.getInstancia());
+            try {
+                gerenteDeJanelas.abrirJanela(CadastroEntregador.getInstancia());
+            } catch (ExceptionDAO ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             Toolkit.getDefaultToolkit().beep();
         }

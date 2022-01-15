@@ -1,14 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
-package Formularios;
+package View;
 
-import static Utils.FormUtils.*;
-import java.util.ArrayList;
+import Controller.CardapioController;
+import static Controller.Utils.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 import model.bean.Cardapio;
 import model.dao.CardapioDAO;
+import model.dao.ExceptionDAO;
 
 /**
  *
@@ -22,7 +21,8 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
      * @return 
      */
     private static CadastroCardapio cadastroCardapio;
-    private final CardapioDAO cardapioDao = new CardapioDAO();
+    private final CardapioController cardapioController = new CardapioController();
+ 
     
     public static CadastroCardapio getInstancia(){
         if(cadastroCardapio== null){
@@ -45,7 +45,11 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
 
     public void refreshTable(){
         
-        preencherTabela(TableCardapio, cardapioDao.findAll(Cardapio.class));
+        try {
+            preencherTabela(TableCardapio, cardapioController.findAll());
+        } catch (ExceptionDAO ex) {
+            Logger.getLogger(CadastroCardapio.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
   
     public void limparDados(){
@@ -328,7 +332,7 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jSeparator1)
-            .addComponent(jLayeredPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 613, Short.MAX_VALUE)
+            .addComponent(jLayeredPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -348,8 +352,13 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
 
     private void cliSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliSaveActionPerformed
         // TODO add your handling code here:
-        Cardapio cardapio = new Cardapio(carNome.getText(), carCategoria.getText(), Double.parseDouble(carPreco.getText()));
-        cardapioDao.insertOrUpdate(cardapio);
+        try {
+            cardapioController.insertOrUpdate(carNome.getText(),
+                                              carCategoria.getText(),
+                                              Double.parseDouble(carPreco.getText()));
+        } catch (ExceptionDAO ex) {
+            Logger.getLogger(CadastroCardapio.class.getName()).log(Level.SEVERE, null, ex);
+        }
         refreshTable();
         limparDados();
     }//GEN-LAST:event_cliSaveActionPerformed
@@ -360,12 +369,15 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
         int carCod = (int) TableCardapio.getValueAt(TableCardapio.getSelectedRow(), 0);
         CardapioDAO dao = new CardapioDAO();
 
-        Cardapio cardapio = dao.findById(Cardapio.class, carCod);
-        carNome.setText(cardapio.getNome());
-        carCategoria.setText(cardapio.getCategoria());
-        carPreco.setText(String.valueOf(cardapio.getPreco()));
-
-
+        Cardapio cardapio;
+        try {
+            cardapio = dao.findById(Cardapio.class, carCod);
+            carNome.setText(cardapio.getNome());
+            carCategoria.setText(cardapio.getCategoria());
+            carPreco.setText(String.valueOf(cardapio.getPreco()));
+        } catch (ExceptionDAO ex) {
+            Logger.getLogger(CadastroCardapio.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_cliEditActionPerformed
 
     private void carCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carCancelarActionPerformed
@@ -377,12 +389,19 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
     private void carComfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carComfirmarActionPerformed
         // TODO add your handling code here:
         Cardapio cardapio = new Cardapio();
-        cardapio.setId((int) TableCardapio.getValueAt(TableCardapio.getSelectedRow(), 0));
+        int id =((int) TableCardapio.getValueAt(TableCardapio.getSelectedRow(), 0));
 
         cardapio.setNome(carNome.getText());
         cardapio.setCategoria(carCategoria.getText());
         cardapio.setPreco(Double.parseDouble(carPreco.getText()));
-        cardapioDao.insertOrUpdate(cardapio);
+        try {
+            cardapioController.insertOrUpdate(id,
+                                              carNome.getText(),
+                                              carCategoria.getText(),
+                                              Double.parseDouble(carPreco.getText()));
+        } catch (ExceptionDAO ex) {
+            Logger.getLogger(CadastroCardapio.class.getName()).log(Level.SEVERE, null, ex);
+        }
         refreshTable();
         limparDados();
         mostarPainel(jPanel4);
@@ -391,15 +410,23 @@ public class CadastroCardapio extends javax.swing.JInternalFrame {
     private void cliEdit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliEdit1ActionPerformed
         // TODO add your handling code here:
         int carCod = (int) TableCardapio.getValueAt(TableCardapio.getSelectedRow(), 0);
-        cardapioDao.removeByID(Cardapio.class, carCod);
+        try {
+            cardapioController.removeByID(carCod);
+        } catch (ExceptionDAO ex) {
+            Logger.getLogger(CadastroCardapio.class.getName()).log(Level.SEVERE, null, ex);
+        }
         refreshTable();
     }//GEN-LAST:event_cliEdit1ActionPerformed
 
     private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
         // TODO add your handling code here:
-        String searchTerm = jTextField4.getText();
-        if(!searchTerm.isEmpty()){
-            preencherTabela(TableCardapio, cardapioDao.findByNome(Cardapio.class, searchTerm));
+        String searchnome = jTextField4.getText();
+        if(!searchnome.isEmpty()){
+            try {
+                preencherTabela(TableCardapio, cardapioController.findLikeName(searchnome));
+            } catch (ExceptionDAO ex) {
+                Logger.getLogger(CadastroCardapio.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
            refreshTable();
         }

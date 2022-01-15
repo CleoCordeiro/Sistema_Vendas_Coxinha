@@ -1,14 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import model.dao.CardapioDAO;
+import model.dao.ExceptionDAO;
 
 /**
  *
@@ -25,13 +24,20 @@ public class Cardapio implements BaseEntity, Serializable{
 
     public Cardapio() {
     }
-
+    
     public Cardapio(String nome, String categoria, double preco) {
         this.nome = nome;
         this.categoria = categoria;
         this.preco = preco;
     }
 
+    public Cardapio(Integer id, String nome, String categoria, double preco) {
+        this.id = id;
+        this.nome = nome;
+        this.categoria = categoria;
+        this.preco = preco;
+    }
+        
     @Override
     public Integer getId() {
         return id;
@@ -65,4 +71,23 @@ public class Cardapio implements BaseEntity, Serializable{
         this.preco = preco;
     }
 
+    public boolean insertOrUpdate(Cardapio cardapio) throws ExceptionDAO{
+      return new CardapioDAO().insertOrUpdate(cardapio);
+    }
+
+    public ArrayList<Cardapio> findAll() throws ExceptionDAO{
+        return new CardapioDAO().findAll(Cardapio.class);
+    }
+        
+    public Cardapio findById(int id) throws ExceptionDAO{
+       return new CardapioDAO().findById(Cardapio.class, id);    
+    }
+        
+    public ArrayList<Cardapio> findLikeName(String nome) throws ExceptionDAO{
+        return new CardapioDAO().findLikeName(Cardapio.class, nome);
+    }
+
+    public boolean removeByID(int id) throws ExceptionDAO{
+       return new CardapioDAO().removeByID(Cardapio.class, id);
+    }
 }

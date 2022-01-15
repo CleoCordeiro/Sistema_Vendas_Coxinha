@@ -1,34 +1,51 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
-package Formularios;
+package View;
 
-import java.awt.Dimension;
+import Controller.EntregadorController;
+import static Controller.Utils.preencherTabela;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.dao.ExceptionDAO;
 
 /**
  *
  * @author Cleo
  */
 public class CadastroEntregador extends javax.swing.JInternalFrame {
-
     private static CadastroEntregador cadastroEntregador;
+    private final EntregadorController entregadorController = new EntregadorController();
+    
     /**
      * Creates new form CadastroCliente
      * @return 
+     * @throws model.dao.ExceptionDAO 
      */
     
-    public static CadastroEntregador getInstancia(){
+    public static CadastroEntregador getInstancia() throws ExceptionDAO{
         if(cadastroEntregador== null){
             cadastroEntregador = new CadastroEntregador();  
         }
         return cadastroEntregador;
     }
-    public CadastroEntregador() {
+    
+    public CadastroEntregador() throws ExceptionDAO {
         initComponents();
+        refreshTable();
     }
 
-  
+    public void refreshTable(){
+        try {  
+            preencherTabela(TableEntregador,  entregadorController.findAll());
+        } catch (ExceptionDAO ex) {
+            Logger.getLogger(CadastroEntregador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void limparDados(){
+        entNome.setText("");
+        entRua.setText("");
+        entBairro.setText("");
+        entTelefone.setText("");
+    } 
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,7 +65,7 @@ public class CadastroEntregador extends javax.swing.JInternalFrame {
         entRua = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         entData = new javax.swing.JFormattedTextField();
-        entFone = new javax.swing.JFormattedTextField();
+        entTelefone = new javax.swing.JFormattedTextField();
         jSeparator1 = new javax.swing.JSeparator();
         entCod = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
@@ -58,7 +75,7 @@ public class CadastroEntregador extends javax.swing.JInternalFrame {
         entSearch = new javax.swing.JTextField();
         jSeparator2 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
-        entTable = new javax.swing.JTable();
+        TableEntregador = new javax.swing.JTable();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 32767));
         cliEdit = new javax.swing.JButton();
         cliSave = new javax.swing.JButton();
@@ -83,7 +100,7 @@ public class CadastroEntregador extends javax.swing.JInternalFrame {
         }
 
         try {
-            entFone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##) #####-####")));
+            entTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##) #####-####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -111,7 +128,7 @@ public class CadastroEntregador extends javax.swing.JInternalFrame {
                     .addComponent(entBairro)
                     .addComponent(entRua)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(entFone, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(entTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -142,7 +159,7 @@ public class CadastroEntregador extends javax.swing.JInternalFrame {
                             .addComponent(jLabel9))
                         .addGap(13, 13, 13)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(entFone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(entTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6)
                             .addComponent(jLabel8)))
                     .addComponent(entData, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -153,8 +170,14 @@ public class CadastroEntregador extends javax.swing.JInternalFrame {
 
         jLabel7.setText("Buscar");
 
-        entTable.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        entTable.setModel(new javax.swing.table.DefaultTableModel(
+        entSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                entSearchKeyReleased(evt);
+            }
+        });
+
+        TableEntregador.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        TableEntregador.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -177,16 +200,16 @@ public class CadastroEntregador extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        entTable.setColumnSelectionAllowed(true);
-        jScrollPane1.setViewportView(entTable);
-        entTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        if (entTable.getColumnModel().getColumnCount() > 0) {
-            entTable.getColumnModel().getColumn(0).setResizable(false);
-            entTable.getColumnModel().getColumn(1).setResizable(false);
-            entTable.getColumnModel().getColumn(2).setResizable(false);
-            entTable.getColumnModel().getColumn(3).setResizable(false);
-            entTable.getColumnModel().getColumn(4).setResizable(false);
-            entTable.getColumnModel().getColumn(5).setResizable(false);
+        TableEntregador.setColumnSelectionAllowed(true);
+        jScrollPane1.setViewportView(TableEntregador);
+        TableEntregador.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        if (TableEntregador.getColumnModel().getColumnCount() > 0) {
+            TableEntregador.getColumnModel().getColumn(0).setResizable(false);
+            TableEntregador.getColumnModel().getColumn(1).setResizable(false);
+            TableEntregador.getColumnModel().getColumn(2).setResizable(false);
+            TableEntregador.getColumnModel().getColumn(3).setResizable(false);
+            TableEntregador.getColumnModel().getColumn(4).setResizable(false);
+            TableEntregador.getColumnModel().getColumn(5).setResizable(false);
         }
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -238,6 +261,11 @@ public class CadastroEntregador extends javax.swing.JInternalFrame {
         cliSave.setText("Salvar");
         cliSave.setToolTipText("Salvar");
         cliSave.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        cliSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cliSaveActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -272,18 +300,41 @@ public class CadastroEntregador extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cliEditActionPerformed
 
+    private void cliSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cliSaveActionPerformed
+        try {
+            entregadorController.insertOrUpdate(entNome.getText(), entRua.getText(), entBairro.getText(), entTelefone.getText());
+        } catch (ExceptionDAO ex) {
+            Logger.getLogger(CadastroEntregador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        refreshTable();
+        limparDados();
+    }//GEN-LAST:event_cliSaveActionPerformed
+
+    private void entSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_entSearchKeyReleased
+        String searchname = entSearch.getText();
+        if(!searchname.isEmpty()){
+            try {
+                preencherTabela(TableEntregador, entregadorController.findLikeName(searchname));
+            } catch (ExceptionDAO ex) {
+                Logger.getLogger(CadastroEntregador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            refreshTable();
+        }
+    }//GEN-LAST:event_entSearchKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable TableEntregador;
     private javax.swing.JButton cliEdit;
     private javax.swing.JButton cliSave;
     private javax.swing.JTextField entBairro;
     private javax.swing.JTextField entCod;
     private javax.swing.JFormattedTextField entData;
-    private javax.swing.JFormattedTextField entFone;
     private javax.swing.JTextField entNome;
     private javax.swing.JTextField entRua;
     private javax.swing.JTextField entSearch;
-    private javax.swing.JTable entTable;
+    private javax.swing.JFormattedTextField entTelefone;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
